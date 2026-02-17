@@ -84,187 +84,643 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0d0b] text-stone-100 font-sans">
-      {/* Background Glow */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-amber-900/20 blur-[120px] rounded-full" />
-        <div className="absolute top-[20%] -right-[10%] w-[30%] h-[50%] bg-orange-900/10 blur-[120px] rounded-full" />
-      </div>
+    <>
+      {/* NOTE: Ensure your layout.tsx has:
+          <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap');
 
-      <div className="relative max-w-2xl mx-auto px-4 py-6">
-        {/* Header */}
-        <header className="mb-6 text-center">
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-2 bg-gradient-to-r from-amber-200 to-yellow-500 bg-clip-text text-transparent">
-            PRIGL RANKING
-          </h1>
-          <div className="flex items-center justify-center gap-3 text-stone-500 text-sm font-medium uppercase tracking-widest">
-            <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-            Live • {lastUpdated.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
+        :root {
+          --bark-dark: #1a1208;
+          --bark-mid: #2c1f0e;
+          --bark-accent: #3d2b14;
+          --wood-warm: #8b5e2a;
+          --wood-light: #c4884a;
+          --grain-gold: #d4a55a;
+          --grain-bright: #f0c070;
+          --moss-green: #3a5c2a;
+          --moss-light: #4e7a3a;
+          --leaf-green: #6aab50;
+          --cream: #f5ead8;
+          --cream-dim: #b8a488;
+          --ring-1: rgba(212, 165, 90, 0.08);
+          --ring-2: rgba(212, 165, 90, 0.04);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+          -webkit-text-size-adjust: 100%;
+          touch-action: manipulation;
+        }
+
+        body {
+          background-color: var(--bark-dark);
+          color: var(--cream);
+          font-family: 'DM Sans', sans-serif;
+          min-height: 100vh;
+          min-height: 100dvh;
+          overflow-x: hidden;
+        }
+
+        /* Wood grain texture via SVG filter */
+        .wood-bg {
+          background-color: var(--bark-dark);
+          background-image:
+            repeating-linear-gradient(
+              92deg,
+              transparent,
+              transparent 2px,
+              rgba(139,94,42,0.03) 2px,
+              rgba(139,94,42,0.03) 4px
+            ),
+            repeating-linear-gradient(
+              180deg,
+              transparent,
+              transparent 60px,
+              rgba(60,43,20,0.15) 60px,
+              rgba(60,43,20,0.15) 62px
+            );
+        }
+
+        /* Tree rings glow behind header */
+        .ring-bg {
+          position: fixed;
+          top: -200px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 700px;
+          height: 700px;
+          border-radius: 50%;
+          background: transparent;
+          box-shadow:
+            0 0 0 1px rgba(212,165,90,0.06),
+            0 0 0 40px rgba(212,165,90,0.04),
+            0 0 0 80px rgba(212,165,90,0.03),
+            0 0 0 130px rgba(212,165,90,0.025),
+            0 0 0 190px rgba(212,165,90,0.02),
+            0 0 0 260px rgba(212,165,90,0.015),
+            0 0 0 340px rgba(212,165,90,0.01);
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .green-glow {
+          position: fixed;
+          bottom: -100px;
+          right: -100px;
+          width: 400px;
+          height: 400px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(74,122,58,0.15) 0%, transparent 70%);
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .container {
+          position: relative;
+          max-width: 640px;
+          margin: 0 auto;
+          padding: 20px 12px calc(48px + env(safe-area-inset-bottom));
+          padding-left: max(12px, env(safe-area-inset-left));
+          padding-right: max(12px, env(safe-area-inset-right));
+          z-index: 1;
+          width: 100%;
+        }
+
+        /* HEADER */
+        header {
+          text-align: center;
+          margin-bottom: 32px;
+          padding-top: 16px;
+        }
+
+        .event-tag {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(58,92,42,0.3);
+          border: 1px solid rgba(106,171,80,0.25);
+          border-radius: 999px;
+          padding: 4px 14px;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: var(--leaf-green);
+          margin-bottom: 16px;
+        }
+
+        .event-tag::before {
+          content: '';
+          display: inline-block;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: var(--leaf-green);
+          box-shadow: 0 0 8px var(--leaf-green);
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
+
+        h1 {
+          font-family: 'Playfair Display', serif;
+          font-weight: 900;
+          font-size: clamp(2.4rem, 8vw, 3.5rem);
+          line-height: 1.2;
+          letter-spacing: -0.02em;
+          background: linear-gradient(160deg, var(--grain-bright) 0%, var(--grain-gold) 40%, var(--wood-light) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin-bottom: 4px;
+          padding-bottom: 0.1em;
+        }
+
+        .subtitle {
+          font-size: 10px;
+          font-weight: 500;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: var(--cream-dim);
+          margin-top: 8px;
+          padding: 0 8px;
+          line-height: 1.5;
+        }
+
+        /* DIVIDER */
+        .wood-divider {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin: 0 auto 28px;
+          max-width: 320px;
+        }
+        .wood-divider::before,
+        .wood-divider::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(212,165,90,0.35), transparent);
+        }
+        .wood-divider span {
+          font-size: 16px;
+        }
+
+        /* TABS */
+        .tabs {
+          display: flex;
+          flex-direction: row;
+          gap: 3px;
+          background: rgba(44,31,14,0.7);
+          border: 1px solid rgba(139,94,42,0.25);
+          border-radius: 16px;
+          padding: 4px;
+          margin-bottom: 16px;
+          backdrop-filter: blur(8px);
+          width: 100%;
+        }
+
+        .tab-btn {
+          flex: 1;
+          min-width: 0;
+          padding: 11px 4px;
+          border: none;
+          border-radius: 12px;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.01em;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          background: transparent;
+          color: var(--cream-dim);
+          text-align: center;
+          min-height: 44px;
+          -webkit-tap-highlight-color: transparent;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .tab-btn:hover {
+          color: var(--cream);
+          background: rgba(139,94,42,0.15);
+        }
+
+        .tab-btn.active {
+          background: linear-gradient(135deg, var(--wood-warm), var(--wood-light));
+          color: var(--bark-dark);
+          box-shadow: 0 2px 12px rgba(139,94,42,0.4);
+        }
+
+        /* RANGE PILLS */
+        .range-pills {
+          display: flex;
+          flex-direction: row;
+          justify-content: stretch;
+          gap: 6px;
+          margin-bottom: 24px;
+          width: 100%;
+        }
+
+        .pill-btn {
+          flex: 1;
+          min-width: 0;
+          padding: 9px 4px;
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border: 1px solid rgba(139,94,42,0.3);
+          background: rgba(44,31,14,0.5);
+          color: var(--cream-dim);
+          letter-spacing: 0.03em;
+          min-height: 44px;
+          -webkit-tap-highlight-color: transparent;
+          white-space: nowrap;
+          text-align: center;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .pill-btn:hover {
+          border-color: rgba(212,165,90,0.5);
+          color: var(--cream);
+        }
+
+        .pill-btn.active {
+          background: rgba(139,94,42,0.35);
+          border-color: var(--grain-gold);
+          color: var(--grain-bright);
+          box-shadow: 0 0 12px rgba(212,165,90,0.15);
+        }
+
+        /* LEADERBOARD CARD */
+        .board-card {
+          background: rgba(28,18,8,0.65);
+          border: 1px solid rgba(139,94,42,0.22);
+          border-radius: 20px;
+          overflow: hidden;
+          backdrop-filter: blur(12px);
+          box-shadow:
+            0 1px 0 rgba(212,165,90,0.08) inset,
+            0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .board-inner {
+          divide-y: divide(rgba(139,94,42,0.12));
+        }
+
+        .entry-row {
+          display: flex;
+          align-items: center;
+          padding: 14px 14px;
+          border-bottom: 1px solid rgba(139,94,42,0.1);
+          transition: background 0.15s ease;
+          position: relative;
+          gap: 0;
+        }
+
+        .entry-row:last-child {
+          border-bottom: none;
+        }
+
+        .entry-row:hover {
+          background: rgba(139,94,42,0.07);
+        }
+
+        .entry-row.top1 {
+          background: linear-gradient(90deg, rgba(212,165,90,0.08) 0%, transparent 60%);
+        }
+        .entry-row.top1::before {
+          content: '';
+          position: absolute;
+          left: 0; top: 0; bottom: 0;
+          width: 3px;
+          background: linear-gradient(180deg, var(--grain-bright), var(--grain-gold));
+          border-radius: 0 2px 2px 0;
+        }
+        .entry-row.top2::before {
+          content: '';
+          position: absolute;
+          left: 0; top: 0; bottom: 0;
+          width: 3px;
+          background: rgba(180,180,180,0.5);
+          border-radius: 0 2px 2px 0;
+        }
+        .entry-row.top3::before {
+          content: '';
+          position: absolute;
+          left: 0; top: 0; bottom: 0;
+          width: 3px;
+          background: rgba(180,120,80,0.5);
+          border-radius: 0 2px 2px 0;
+        }
+
+        /* Rank */
+        .rank-col {
+          flex-shrink: 0;
+          width: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .rank-emoji { font-size: 22px; line-height: 1; }
+        .rank-num {
+          font-family: 'DM Mono', monospace;
+          font-size: 15px;
+          font-weight: 500;
+          color: rgba(184,164,136,0.3);
+        }
+
+        /* Name block */
+        .name-col {
+          flex: 1;
+          padding: 0 10px;
+          min-width: 0;
+          overflow: hidden;
+        }
+        .entry-name {
+          font-size: 14px;
+          font-weight: 700;
+          color: var(--cream);
+          word-break: break-word;
+          line-height: 1.2;
+          margin-bottom: 3px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .entry-name.dimmed { color: var(--cream-dim); }
+        .entry-meta {
+          font-family: 'DM Mono', monospace;
+          font-size: 10px;
+          color: rgba(184,164,136,0.45);
+          display: flex;
+          gap: 6px;
+          flex-wrap: wrap;
+        }
+
+        /* Weight block */
+        .weight-col {
+          text-align: right;
+          flex-shrink: 0;
+          max-width: 110px;
+        }
+        .weight-main {
+          font-family: 'DM Mono', monospace;
+          font-size: 16px;
+          font-weight: 500;
+          color: var(--cream-dim);
+          line-height: 1;
+          white-space: nowrap;
+        }
+        .weight-main.gold { color: var(--grain-gold); }
+        .weight-sub {
+          font-family: 'DM Mono', monospace;
+          font-size: 9px;
+          color: rgba(184,164,136,0.4);
+          margin-top: 4px;
+          white-space: nowrap;
+        }
+        .weight-unit { font-size: 11px; color: rgba(184,164,136,0.5); }
+
+        /* Loading */
+        .loading {
+          padding: 60px 20px;
+          text-align: center;
+          color: var(--cream-dim);
+          font-size: 13px;
+          letter-spacing: 0.1em;
+          animation: pulse 1.5s ease infinite;
+        }
+
+        /* Empty */
+        .empty {
+          padding: 60px 20px;
+          text-align: center;
+          color: rgba(184,164,136,0.3);
+          font-size: 13px;
+        }
+
+        /* Footer */
+        footer {
+          margin-top: 24px;
+          text-align: center;
+        }
+        .footer-text {
+          font-size: 9px;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: rgba(184,164,136,0.3);
+        }
+
+        /* Wood ring decoration */
+        .log-section-label {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 20px;
+          background: rgba(44,31,14,0.5);
+          border-bottom: 1px solid rgba(139,94,42,0.15);
+        }
+        .log-ring {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          border: 2px solid rgba(212,165,90,0.3);
+          box-shadow:
+            inset 0 0 0 3px rgba(44,31,14,0.9),
+            inset 0 0 0 5px rgba(212,165,90,0.2),
+            inset 0 0 0 8px rgba(44,31,14,0.9);
+          flex-shrink: 0;
+        }
+        .section-label-text {
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(212,165,90,0.5);
+        }
+
+        /* Responsive scale-up for larger screens */
+        @media (min-width: 480px) {
+          .entry-name { font-size: 15px; }
+          .weight-main { font-size: 18px; }
+          .weight-sub { font-size: 10px; }
+          .rank-emoji { font-size: 24px; }
+          .rank-num { font-size: 17px; }
+          .entry-row { padding: 16px 18px; }
+          .rank-col { width: 44px; }
+          .name-col { padding: 0 14px; }
+        }
+
+        @media (min-width: 600px) {
+          .weight-main { font-size: 20px; }
+          .entry-row { padding: 16px 20px; }
+          .rank-col { width: 48px; }
+          .rank-emoji { font-size: 26px; }
+        }
+      `}</style>
+
+      <div className="wood-bg" style={{ minHeight: '100vh' }}>
+        <div className="ring-bg" />
+        <div className="green-glow" />
+
+        <div className="container">
+          {/* Header */}
+          <header>
+            <div className="event-tag">Live</div>
+            <h1>Prigl Ranking</h1>
+            <p className="subtitle">Mehealer Bauernjugend</p>
+          </header>
+
+          <div className="wood-divider">
+            <span>🪵</span>
           </div>
-        </header>
 
-        {/* Category Tabs */}
-        <div className="flex gap-2 mb-4 bg-stone-900/40 p-1 rounded-2xl border border-stone-800/60">
-          <button
-            onClick={() => handleCategoryChange('total')}
-            className={`flex-1 px-3 py-3 rounded-xl text-xs font-bold transition-all ${
-              category === 'total'
-                ? 'bg-amber-600 text-white shadow-lg shadow-amber-900/30'
-                : 'text-stone-400 hover:text-stone-200'
-            }`}
-          >
-            🪵 Schwerster Prigl
-          </button>
-          <button
-            onClick={() => handleCategoryChange('per_person')}
-            className={`flex-1 px-3 py-3 rounded-xl text-xs font-bold transition-all ${
-              category === 'per_person'
-                ? 'bg-amber-600 text-white shadow-lg shadow-amber-900/30'
-                : 'text-stone-400 hover:text-stone-200'
-            }`}
-          >
-            👥 Gruppenwertung
-          </button>
-          <button
-            onClick={() => handleCategoryChange('solo')}
-            className={`flex-1 px-3 py-3 rounded-xl text-xs font-bold transition-all ${
-              category === 'solo'
-                ? 'bg-amber-600 text-white shadow-lg shadow-amber-900/30'
-                : 'text-stone-400 hover:text-stone-200'
-            }`}
-          >
-            💪 Einzelwertung
-          </button>
-        </div>
-
-        {/* Range Filter */}
-        <div className="flex flex-wrap justify-center gap-2 mb-6">
-          {rangeOptions.map((r) => (
+          {/* Category Tabs */}
+          <div className="tabs">
             <button
-              key={r.label}
-              onClick={() => {
-                setLoading(true);
-                setRange({ start: r.start, end: r.end });
-              }}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all border ${
-                range.start === r.start
-                  ? 'bg-stone-700 border-stone-600 text-white shadow-lg'
-                  : 'bg-stone-900/60 border-stone-800 text-stone-500 hover:border-stone-600 hover:text-stone-300'
-              }`}
+              className={`tab-btn ${category === 'total' ? 'active' : ''}`}
+              onClick={() => handleCategoryChange('total')}
             >
-              {r.label}
+              🪵 Schwerster <br />Prigl
             </button>
-          ))}
-        </div>
+            <button
+              className={`tab-btn ${category === 'per_person' ? 'active' : ''}`}
+              onClick={() => handleCategoryChange('per_person')}
+            >
+              👥 Gruppenwertung
+            </button>
+            <button
+              className={`tab-btn ${category === 'solo' ? 'active' : ''}`}
+              onClick={() => handleCategoryChange('solo')}
+            >
+              💪 Einzelwertung
+            </button>
+          </div>
 
-        {/* Leaderboard */}
-        <div className="bg-stone-900/40 border border-stone-800/60 rounded-3xl overflow-hidden backdrop-blur-md">
-          {loading ? (
-            <div className="py-20 text-center animate-pulse text-stone-500">Lade Daten...</div>
-          ) : (
-            <div className="divide-y divide-stone-800/50">
-              {entries.map((entry, index) => {
-                const rank = range.start + index + 1;
-                const isTop3 = rank <= 3;
-                const weightPerPerson = entry.weight / entry.group_size;
+          {/* Range Filter */}
+          <div className="range-pills">
+            {rangeOptions.map((r) => (
+              <button
+                key={r.label}
+                className={`pill-btn ${range.start === r.start ? 'active' : ''}`}
+                onClick={() => {
+                  setLoading(true);
+                  setRange({ start: r.start, end: r.end });
+                }}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
 
-                return (
-                  <div
-                    key={entry.id}
-                    className="group flex items-center p-4 md:p-5 hover:bg-stone-800/30 transition-colors"
-                  >
-                    {/* Rank */}
-                    <div className="flex-shrink-0 w-12 flex items-center justify-center">
-                      {rank === 1 && <span className="text-3xl">🥇</span>}
-                      {rank === 2 && <span className="text-3xl">🥈</span>}
-                      {rank === 3 && <span className="text-3xl">🥉</span>}
-                      {rank > 3 && (
-                        <span className="text-xl font-black text-stone-600">{rank}</span>
-                      )}
-                    </div>
-
-                    {/* Name & Info */}
-                    <div className="flex-1 px-4 min-w-0">
-                      <div className={`text-base md:text-lg font-bold leading-tight break-words mb-1 ${isTop3 ? 'text-white' : 'text-stone-300'}`}>
-                        {entry.name || 'Anonymer Stamm'}
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-stone-600 font-medium">
-                        <span>
-                          {new Date(entry.created_at).toLocaleTimeString('de-DE', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </span>
-                        <span className="text-stone-700">•</span>
-                        <span className="text-stone-500">
-                          {entry.group_size === 1 ? 'Solo' : `${entry.group_size} Personen`}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Weight Display */}
-                    <div className="text-right flex-shrink-0">
-
-                      {/* Schwerster Prigl: Primär Gesamtgewicht, dann Info */}
-                      {category === 'total' && (
-                        <>
-                          <div className={`text-xl md:text-2xl font-black tabular-nums ${isTop3 ? 'text-amber-500' : 'text-stone-400'}`}>
-                            {formatWeight(entry.weight)}
-                          </div>
-                          {entry.group_size > 1 && (
-                            <div className="text-xs text-stone-600 mt-0.5">
-                              {entry.group_size} P • {formatWeight(weightPerPerson)}/P
-                            </div>
-                          )}
-                        </>
-                      )}
-
-                      {/* Gruppenwertung: Primär Gewicht/Person, dann Gesamtgewicht + Anzahl */}
-                      {category === 'per_person' && (
-                        <>
-                          <div className={`text-xl md:text-2xl font-black tabular-nums ${isTop3 ? 'text-amber-500' : 'text-stone-400'}`}>
-                            {formatWeight(weightPerPerson)}
-                            <span className="text-sm font-medium text-stone-500"> /P</span>
-                          </div>
-                          <div className="text-xs text-stone-600 mt-0.5">
-                            {entry.group_size} P • {formatWeight(entry.weight)} gesamt
-                          </div>
-                        </>
-                      )}
-
-                      {/* Einzelwertung: nur Gewicht */}
-                      {category === 'solo' && (
-                        <>
-                          <div className={`text-xl md:text-2xl font-black tabular-nums ${isTop3 ? 'text-amber-500' : 'text-stone-400'}`}>
-                            {formatWeight(entry.weight)}
-                          </div>
-                          <div className="text-xs text-stone-600 mt-0.5">
-                            Solo
-                          </div>
-                        </>
-                      )}
-
-                    </div>
-                  </div>
-                );
-              })}
-
-              {entries.length === 0 && (
-                <div className="py-20 text-center text-stone-600">
-                  Keine Einträge in diesem Bereich
-                </div>
-              )}
+          {/* Leaderboard */}
+          <div className="board-card">
+            <div className="log-section-label">
+              <div className="log-ring" />
+              <span className="section-label-text">
+                Live · {lastUpdated.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr
+              </span>
             </div>
-          )}
-        </div>
 
-        {/* Footer */}
-        <footer className="mt-6 text-center">
-          <p className="text-stone-600 text-[10px] uppercase tracking-[0.2em]">
-            Mindestgewicht 20kg • Aktualisiert alle 30 Sek
-          </p>
-        </footer>
+            {loading ? (
+              <div className="loading">Lade Daten …</div>
+            ) : (
+              <>
+                {entries.map((entry, index) => {
+                  const rank = range.start + index + 1;
+                  const isTop3 = rank <= 3;
+                  const weightPerPerson = entry.weight / entry.group_size;
+                  const rowClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
+
+                  return (
+                    <div key={entry.id} className={`entry-row ${rowClass}`}>
+                      {/* Rank */}
+                      <div className="rank-col">
+                        {rank === 1 && <span className="rank-emoji">🥇</span>}
+                        {rank === 2 && <span className="rank-emoji">🥈</span>}
+                        {rank === 3 && <span className="rank-emoji">🥉</span>}
+                        {rank > 3 && <span className="rank-num">{rank}</span>}
+                      </div>
+
+                      {/* Name & meta */}
+                      <div className="name-col">
+                        <div className={`entry-name ${isTop3 ? '' : 'dimmed'}`}>
+                          {entry.name || 'Anonymer Stamm'}
+                        </div>
+                        <div className="entry-meta">
+                          <span>
+                            {new Date(entry.created_at).toLocaleTimeString('de-DE', {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </span>
+                          <span>·</span>
+                          <span>{entry.group_size === 1 ? 'Solo' : `${entry.group_size} Pers.`}</span>
+                        </div>
+                      </div>
+
+                      {/* Weight */}
+                      <div className="weight-col">
+                        {category === 'total' && (
+                          <>
+                            <div className={`weight-main ${isTop3 ? 'gold' : ''}`}>
+                              {formatWeight(entry.weight)}
+                            </div>
+                            {entry.group_size > 1 && (
+                              <div className="weight-sub">
+                                {entry.group_size} P · {formatWeight(weightPerPerson)}/P
+                              </div>
+                            )}
+                          </>
+                        )}
+
+                        {category === 'per_person' && (
+                          <>
+                            <div className={`weight-main ${isTop3 ? 'gold' : ''}`}>
+                              {formatWeight(weightPerPerson)}<span className="weight-unit"> /P</span>
+                            </div>
+                            <div className="weight-sub">
+                              {entry.group_size} P · {formatWeight(entry.weight)} ges.
+                            </div>
+                          </>
+                        )}
+
+                        {category === 'solo' && (
+                          <>
+                            <div className={`weight-main ${isTop3 ? 'gold' : ''}`}>
+                              {formatWeight(entry.weight)}
+                            </div>
+                            <div className="weight-sub">Solo</div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {entries.length === 0 && (
+                  <div className="empty">Keine Einträge in diesem Bereich</div>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* Footer */}
+          <footer>
+            <p className="footer-text">Mindestgewicht 20 kg · Aktualisiert alle 30 Sek</p>
+          </footer>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
