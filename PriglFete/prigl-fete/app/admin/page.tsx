@@ -34,7 +34,7 @@ export default function AdminPage() {
 
     const { error } = await supabase.from('baumstamm_entries').insert({
       name,
-      weight: parseFloat(weight),
+      weight: parseFloat(weight.replace(',', '.')),
       group_size: parseInt(groupSize),
       phone,
     });
@@ -109,7 +109,7 @@ export default function AdminPage() {
               required
               min="20"
               step="0.1"
-              placeholder="z.B. 85.5"
+              placeholder="z.B. 1385,5"
               className="w-full bg-stone-800/60 border border-stone-700 rounded-xl px-4 py-4 text-stone-100 placeholder-stone-600 focus:outline-none focus:border-amber-600 text-base"
             />
           </div>
@@ -138,7 +138,7 @@ export default function AdminPage() {
               autoComplete="tel"
               value={phone}
               onChange={e => setPhone(e.target.value)}
-              placeholder="+43 123 456 789"
+              placeholder="3914201527"
               className="w-full bg-stone-800/60 border border-stone-700 rounded-xl px-4 py-4 text-stone-100 placeholder-stone-600 focus:outline-none focus:border-amber-600 text-base"
             />
           </div>
