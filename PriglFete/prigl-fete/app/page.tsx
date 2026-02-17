@@ -597,7 +597,7 @@ export default function LeaderboardPage() {
               className={`tab-btn ${category === 'per_person' ? 'active' : ''}`}
               onClick={() => handleCategoryChange('per_person')}
             >
-              👥 Gruppenwertung
+              👥 Gruppen
             </button>
             <button
               className={`tab-btn ${category === 'solo' ? 'active' : ''}`}
