@@ -262,13 +262,14 @@ export default function LeaderboardPage() {
         }
         .tab-btn {
           flex: 1; min-width: 0;
-          padding: 11px 4px; border: none; border-radius: 12px;
-          font-size: 13px; font-weight: 700;
+          padding: 10px 6px; border: none; border-radius: 12px;
+          font-size: 12px; font-weight: 700;
           cursor: pointer; transition: all 0.2s ease;
           background: transparent; color: #c8b490;
-          text-align: center; min-height: 48px;
+          text-align: center; min-height: 52px;
           -webkit-tap-highlight-color: transparent;
-          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+          white-space: normal; word-break: break-word; line-height: 1.3;
+
         }
         .tab-btn:hover { color: var(--cream); background: rgba(139,94,42,0.15); }
         .tab-btn.active {
@@ -539,13 +540,13 @@ export default function LeaderboardPage() {
               className={`tab-btn ${category === 'per_person' ? 'active' : ''}`}
               onClick={() => handleCategoryChange('per_person')}
             >
-              👥 Gruppen
+              👥<br />Gruppen
             </button>
             <button
               className={`tab-btn ${category === 'solo' ? 'active' : ''}`}
               onClick={() => handleCategoryChange('solo')}
             >
-              💪 Einzelwertung
+              💪<br />Einzelwertung
             </button>
           </div>
 
@@ -595,7 +596,7 @@ export default function LeaderboardPage() {
 
           {/* ── Footer ── */}
           <footer>
-            <p className="footer-text">20 kg für Freigetränk · Aktualisiert alle 30 Sek</p>
+            <p className="footer-text">Mindestgewicht 20 kg · Aktualisiert alle 30 Sek</p>
           </footer>
 
         </div>
