@@ -204,12 +204,12 @@ export default function LeaderboardPage() {
           display: inline-flex;
           align-items: center; gap: 8px;
           background: rgba(58,92,42,0.3);
-          border: 1px solid rgba(106,171,80,0.25);
+          border: 1px solid rgba(106,171,80,0.35);
           border-radius: 999px;
-          padding: 4px 14px;
-          font-size: 10px; font-weight: 700;
-          letter-spacing: 0.2em; text-transform: uppercase;
-          color: var(--leaf-green);
+          padding: 5px 16px;
+          font-size: 12px; font-weight: 700;
+          letter-spacing: 0.18em; text-transform: uppercase;
+          color: #8dce6e;
           margin-bottom: 14px;
         }
         .event-tag::before {
@@ -235,9 +235,9 @@ export default function LeaderboardPage() {
         }
 
         .subtitle {
-          font-size: 10px; font-weight: 500;
-          letter-spacing: 0.15em; text-transform: uppercase;
-          color: var(--cream-dim); margin-top: 8px;
+          font-size: 13px; font-weight: 500;
+          letter-spacing: 0.14em; text-transform: uppercase;
+          color: #d4c4a8; margin-top: 8px;
         }
 
         /* ── DIVIDER ── */
@@ -263,17 +263,17 @@ export default function LeaderboardPage() {
         .tab-btn {
           flex: 1; min-width: 0;
           padding: 11px 4px; border: none; border-radius: 12px;
-          font-size: 11px; font-weight: 700;
+          font-size: 13px; font-weight: 700;
           cursor: pointer; transition: all 0.2s ease;
-          background: transparent; color: var(--cream-dim);
-          text-align: center; min-height: 44px;
+          background: transparent; color: #c8b490;
+          text-align: center; min-height: 48px;
           -webkit-tap-highlight-color: transparent;
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .tab-btn:hover { color: var(--cream); background: rgba(139,94,42,0.15); }
         .tab-btn.active {
           background: linear-gradient(135deg, var(--wood-warm), var(--wood-light));
-          color: var(--bark-dark);
+          color: #1a1208;
           box-shadow: 0 2px 12px rgba(139,94,42,0.4);
         }
 
@@ -292,9 +292,9 @@ export default function LeaderboardPage() {
           flex-shrink: 0;
         }
         .live-text {
-          font-size: 9px; font-weight: 700;
-          letter-spacing: 0.22em; text-transform: uppercase;
-          color: rgba(212,165,90,0.45);
+          font-size: 11px; font-weight: 700;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: rgba(212,165,90,0.65);
         }
 
         /* ── PODIUM ── */
@@ -388,19 +388,19 @@ export default function LeaderboardPage() {
         /* Name */
         .p-name {
           font-family: 'Playfair Display', serif;
-          font-weight: 700; font-size: 12px;
+          font-weight: 700; font-size: 15px;
           text-align: center; line-height: 1.25;
           color: var(--cream); word-break: break-word;
         }
         .rank-1 .p-name {
-          font-size: 15px;
+          font-size: 18px;
           background: linear-gradient(135deg, var(--grain-bright) 0%, var(--grain-gold) 60%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-        .rank-2 .p-name { color: #cdd8e4; }
-        .rank-3 .p-name { color: #d4b49a; }
+        .rank-2 .p-name { color: #e8f0f8; }
+        .rank-3 .p-name { color: #eedcc8; }
 
         /* Weight */
         .p-weight {
@@ -409,23 +409,23 @@ export default function LeaderboardPage() {
           text-align: center; white-space: nowrap;
         }
         .rank-1 .p-weight {
-          font-size: clamp(17px, 5vw, 23px);
+          font-size: clamp(20px, 6vw, 28px);
           color: var(--grain-gold);
           text-shadow: 0 0 24px rgba(212,165,90,0.4);
         }
-        .rank-2 .p-weight { font-size: clamp(13px, 4vw, 17px); color: #b4c4d4; }
-        .rank-3 .p-weight { font-size: clamp(13px, 4vw, 17px); color: var(--wood-light); }
+        .rank-2 .p-weight { font-size: clamp(16px, 4.5vw, 21px); color: #d0dde8; }
+        .rank-3 .p-weight { font-size: clamp(16px, 4.5vw, 21px); color: #ddb888; }
 
-        .p-unit { font-size: 0.65em; opacity: 0.7; }
+        .p-unit { font-size: 0.65em; opacity: 0.8; }
 
         .p-sub {
           font-family: 'DM Mono', monospace;
-          font-size: 9px; color: rgba(184,164,136,0.36);
+          font-size: 11px; color: rgba(220,200,170,0.65);
           text-align: center;
         }
         .p-time {
           font-family: 'DM Mono', monospace;
-          font-size: 9px; color: rgba(184,164,136,0.24);
+          font-size: 11px; color: rgba(200,180,150,0.50);
           text-align: center;
         }
 
@@ -464,9 +464,9 @@ export default function LeaderboardPage() {
           font-family: 'Playfair Display', serif;
           font-weight: 900; position: relative; z-index: 1; user-select: none;
         }
-        .platform-1 .platform-num { font-size: 38px; color: rgba(212,165,90,0.42); }
-        .platform-2 .platform-num { font-size: 24px; color: rgba(185,200,215,0.28); }
-        .platform-3 .platform-num { font-size: 20px; color: rgba(175,108,55,0.28); }
+        .platform-1 .platform-num { font-size: 38px; color: rgba(212,165,90,0.60); }
+        .platform-2 .platform-num { font-size: 24px; color: rgba(210,225,240,0.45); }
+        .platform-3 .platform-num { font-size: 20px; color: rgba(200,140,90,0.45); }
 
         /* ── EMPTY SLOT ── */
         .podium-empty-card {
@@ -482,31 +482,31 @@ export default function LeaderboardPage() {
         /* ── LOADING / EMPTY STATE ── */
         .loading {
           padding: 80px 20px; text-align: center;
-          color: var(--cream-dim); font-size: 12px; letter-spacing: 0.12em;
+          color: #c8b490; font-size: 14px; letter-spacing: 0.1em;
           animation: blink 1.5s ease infinite;
         }
         .empty-state {
           padding: 80px 20px; text-align: center;
-          color: rgba(184,164,136,0.25); font-size: 13px;
+          color: rgba(200,180,150,0.50); font-size: 15px;
         }
 
         /* ── FOOTER ── */
         footer { margin-top: 20px; text-align: center; }
         .footer-text {
-          font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
-          color: rgba(184,164,136,0.26);
+          font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+          color: rgba(200,180,150,0.45);
         }
 
         /* ── RESPONSIVE ── */
         @media (min-width: 400px) {
-          .p-name { font-size: 13px !important; }
-          .rank-1 .p-name { font-size: 16px !important; }
+          .p-name { font-size: 16px !important; }
+          .rank-1 .p-name { font-size: 19px !important; }
           .medal { font-size: 32px; }
-          .rank-1 .medal { font-size: 44px; }
+          .rank-1 .medal { font-size: 46px; }
         }
         @media (min-width: 540px) {
           .podium-col { max-width: 210px; }
-          .p-sub, .p-time { font-size: 10px; }
+          .p-sub, .p-time { font-size: 12px; }
           .podium-stage { gap: 12px; }
         }
       `}</style>
@@ -595,7 +595,7 @@ export default function LeaderboardPage() {
 
           {/* ── Footer ── */}
           <footer>
-            <p className="footer-text">Mindestgewicht 20 kg · Aktualisiert alle 30 Sek</p>
+            <p className="footer-text">20 kg für Freigetränk · Aktualisiert alle 30 Sek</p>
           </footer>
 
         </div>
