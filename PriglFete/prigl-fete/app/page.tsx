@@ -589,7 +589,7 @@ export default function LeaderboardPage() {
           {/* ── Footer ── */}
           <footer>
             <p className="footer-text">· Aktualisiert alle 30 Sek ·</p>
-            <p className="footer-text2">· Mindestens 4 kg ·</p>
+            <p className="footer-text">· Mindestens 4 kg ·</p>
           </footer>
 
         </div>
