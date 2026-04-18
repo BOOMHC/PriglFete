@@ -549,15 +549,7 @@ export default function LeaderboardPage() {
               💪<br />Einzelwertung
             </button>
           </div>
-
-          {/* ── Live label ── */}
-          <div className="live-label">
-            <div className="log-ring" />
-            <span className="live-text">
-              Live · {lastUpdated.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr
-            </span>
-          </div>
-
+          <br />
           {/* ── Podium / Loading / Empty ── */}
           {loading ? (
             <div className="loading">Lade Daten …</div>
@@ -596,7 +588,7 @@ export default function LeaderboardPage() {
 
           {/* ── Footer ── */}
           <footer>
-            <p className="footer-text">Mindestgewicht 20 kg · Aktualisiert alle 30 Sek</p>
+            <p className="footer-text">· Aktualisiert alle 30 Sek ·</p>
           </footer>
 
         </div>
