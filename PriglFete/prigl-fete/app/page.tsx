@@ -549,7 +549,7 @@ export default function LeaderboardPage() {
               💪<br />Einzelwertung
             </button>
           </div>
-          <br />
+          <br /> <br />
           {/* ── Podium / Loading / Empty ── */}
           {loading ? (
             <div className="loading">Lade Daten …</div>
@@ -585,7 +585,7 @@ export default function LeaderboardPage() {
               ))}
             </div>
           )}
-          <br /><br />
+          <br />
           {/* ── Footer ── */}
           <footer>
             <p className="footer-text">· Aktualisiert alle 30 Sek ·</p>
