@@ -585,7 +585,7 @@ export default function LeaderboardPage() {
               ))}
             </div>
           )}
-
+          <br /><br />
           {/* ── Footer ── */}
           <footer>
             <p className="footer-text">· Aktualisiert alle 30 Sek ·</p>
